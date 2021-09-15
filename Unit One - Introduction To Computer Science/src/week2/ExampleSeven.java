@@ -1,27 +1,19 @@
 package week2;
 
 /**
- * Type Casting
+ * final modifier - constant
  */
-public class ExampleEight {
+public class ExampleSeven {
   public static void main(String[] args) {
-    final int NUM_MARKS = 5;
+    //final int x = 7;
+    // x = 6; ///cannot reassign a value to a final variable
 
-    int markOne = 78, markTwo = 87, markThree = 64, markFour = 95, markFive = 84;
+    //final int y;
+    //y = 8;
+    // y++; // cannot modify the variable once it is set if it is constant
 
-    double average = (double) (markOne + markTwo + markThree + markFour + markFive) / NUM_MARKS;
-
-    System.out.println("The average is: " + average);
-
-    double y = 3.7;
-    int x = (int) y;
-
-    double z = (double) 7; // explicit cast
-
-    // int -> double // widening conversion
-    // double -> int // narrowing conversion
-
-    // boolean p = (int)true; // cannot cast from boolean to int
+    //final int NUM_STUDENTS = 18; // naming convention for constants (final variable) is UPPER_CASE with _ for
+                                 // spaces
 
   }
 }
