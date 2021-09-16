@@ -9,12 +9,11 @@ package week1;
 
 public class ExampleFour{
     public static void main(String[] args){
-        int markOne = 75, markTwo = 80, markThree = 87;
+        int markOne = 75, markTwo = 80, markThree = 87; // declared 3 integer variable and assigned them values.
 
         int average = (markOne + markTwo + markThree) / 3;
-
-        System.out.println("the average is " + average);
-
+    
+        System.out.println("The average is: " + average); // String cancatanation (joing something to a String)
 
     }
 }

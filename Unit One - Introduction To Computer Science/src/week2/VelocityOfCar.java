@@ -6,7 +6,7 @@ public class VelocityOfCar {
         int at = 27;
         int vf = vi + at;
 
-        System.out.println(vf + " kph");
+        System.out.println(vf + "  kph");
         
     }
     
