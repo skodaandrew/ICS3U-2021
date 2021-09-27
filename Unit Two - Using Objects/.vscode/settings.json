@@ -1,4 +1,7 @@
 {
-    "java.project.sourcePaths": ["src"],
+    "java.project.sourcePaths": [
+        "src",
+        "week3"
+    ],
     "java.project.outputPath": "bin"
 }
