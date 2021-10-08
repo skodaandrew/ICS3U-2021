@@ -22,6 +22,10 @@ public class ExtraPractice {
 
        System.out.println(removeRandomcharacters("james"));
 
+       System.out.println(addTwoString("cup", "hamburger"));
+
+       
+
     }
 
     private static String questionSix(String string, String substr) {
@@ -72,8 +76,10 @@ public class ExtraPractice {
         return ss + aa;
    }
 
-   //public static String addTwoString(String a, String b){
-       //String la = a.substring();
+   public static int addTwoString(String str, String str2 ){
+        int length = str.length() + str2.length();
+        return length;
+   }
 
     public static double slopeOfline (int x1, int x2, int y1, int y2){
         double slope = x1 - x2 / y1 - y2;

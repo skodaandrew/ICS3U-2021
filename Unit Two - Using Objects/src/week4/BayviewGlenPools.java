@@ -10,8 +10,8 @@ public class BayviewGlenPools {
         final int deepHeight = 8;
 
         final int linerCost = 2;
-
-        //System.out.println();
+        
+        System.out.println(getVolume(length, width, shallowHeight, shallowLength, transition, deepHeight));
 
         double volume = getVolume(length, width, shallowHeight, shallowLength, transition, deepHeight);
 
@@ -26,7 +26,14 @@ public class BayviewGlenPools {
     private static double getVolume(int length, int width, int shallowHeight, int shallowLength, int transition, int deepHeight){
         double Base = Math.sqrt(Math.pow(transition, 2)) - Math.pow(deepHeight - shallowHeight, 2);
         double deepLength = length - shallowLength - transition - Base;
-        double vol = 
+        
+        double deepvol = deepHeight * deepLength * width;
+        double shallowVolume = shallowHeight * shallowLength * width;
+
+        double transitionvolume = Base * shallowHeight * width;
+        transitionvolume += width * (deepHeight - shallowHeight) * Base * 0.5;
+
+        return transitionvolume + shallowVolume + deepvol;
     }
     
 }
