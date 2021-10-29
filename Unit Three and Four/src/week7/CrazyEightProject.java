@@ -2,6 +2,7 @@ package week7;
 
 import java.util.Scanner;
 
+import javax.lang.model.util.ElementScanner6;
 
 /*
 1: game starts
@@ -26,7 +27,6 @@ newhand = currenthand+ "_" +next card
 
 returb new hand 
 */
-
    public class CrazyEightProject{
       private static final double NUM_SUITS = 4;
       private static final String HEARTS = "H";
@@ -43,19 +43,21 @@ returb new hand
 
       public static void main(String[] args) {
 
-      int computerPlayer1Score = 0;
-      int computerPlayer2Score = 0;
-      int playerScore = 0;
+
       Scanner in = new Scanner(System.in);
 
 
-
+      String result = playRound(in);
 
    // String face = getFace();
 
+         int playerScore = 0;
+         int computerPlayer1Score = 0;
+         int computerPlayer2Score = 0;
+
 
          while(!gameOver(playerScore, computerPlayer1Score, computerPlayer2Score)){
-            String result = playRound(in);
+            result = playRound(in);
             int firstDash = result.indexOf("-");
             int secondDash = result.lastIndexOf("-");
             //int secondDash = result.indexOf("-",firstDash + 1);
@@ -79,7 +81,7 @@ returb new hand
       String topCard = "";
       boolean GameIsPlaying = true;
       String strProcessResult = "";
-      String[] arrProcResult;
+
 
       for(int i = 0; i < 5; i++){
         playerHand += getCard() + " ";
@@ -96,6 +98,20 @@ returb new hand
 
       topCard = getCard();
       
+/*
+      // looking for card 3S
+      String strTest1 = GetThePlayableCard("2A 3S 5C 5S", "3", "D");
+      // looking for card 2A
+      String strTest2 = GetThePlayableCard("2A 8S 5C 5S", "2", "D");
+      // look for 8S
+      String strTest3A = GetThePlayableCard("2A 8S 10C 5S", "2", "C");
+      String strTest3B = GetThePlayableCard("8S 2A 10C 5S", "2", "C");
+      String strTest3C = GetThePlayableCard("2A 5S 10C 8S", "2", "C");
+      // looking for 5D
+      String strTest4 = GetThePlayableCard("2A 3S 5C 5D", "3", "D");
+
+*/
+
       while(GameIsPlaying){
 
          
@@ -114,45 +130,41 @@ returb new hand
          // remove the card from player's hand
          strProcessResult = processPlayer(playerHand, topCard, in, true);
          // strTopCard + ":" + playerHand
-         arrProcResult = strProcessResult.split(":");
-         if (arrProcResult.length == 2)
+         topCard = strProcessResult.substring(0, strProcessResult.indexOf(":"));
+         playerHand = strProcessResult.substring(strProcessResult.indexOf(":") + 1);
+         if (playerHand.trim().length() == 0)
          {
-            topCard = arrProcResult[0];
-            playerHand = arrProcResult[1];
+            GameIsPlaying = false;
+            break;
          }
 
          // 2. Computer 1 goes
          strProcessResult = processPlayer(computer1Hand, topCard, in, true);
          // strTopCard + ":" + playerHand
-         arrProcResult = strProcessResult.split(":");
-         if (arrProcResult.length == 2)
+         topCard = strProcessResult.substring(0, strProcessResult.indexOf(":"));
+         computer1Hand = strProcessResult.substring(strProcessResult.indexOf(":") + 1);
+         if (computer1Hand.trim().length() == 0)
          {
-            topCard = arrProcResult[0];
-            computer1Hand = arrProcResult[1];
+            GameIsPlaying = false;
+            break;
          }
-
 
          // 3. Computer 2 goes
          strProcessResult = processPlayer(computer2Hand, topCard, in, true);
          // strTopCard + ":" + playerHand
-         arrProcResult = strProcessResult.split(":");
-         if (arrProcResult.length == 2)
+         topCard = strProcessResult.substring(0, strProcessResult.indexOf(":"));
+         computer2Hand = strProcessResult.substring(strProcessResult.indexOf(":") + 1);
+         if (computer2Hand.trim().length() == 0)
          {
-            topCard = arrProcResult[0];
-            computer2Hand = arrProcResult[1];
+            GameIsPlaying = false;
+            break;
          }
-
-      // Check conditions (scores, player out of cards, etc)
-      // if any of them is true, then set GameIsPlaying to false.
-
-      // Parse UserInput, make a function called ParseUserInput
-      // 1. If user type in 'g' then draw cards until there is a valid card in user hand to play.
-      // 2. User enter a card in his hand. In this case take card off user's hands and place it in as top card.
-
-      
-
       }
       
+      // game is over
+      int computerPlayer1Score = GetPlayerScore(computer1Hand);
+      int computerPlayer2Score = GetPlayerScore(computer2Hand);
+      int playerScore = GetPlayerScore(playerHand);
       /*
       hand out 5 cards 
       hand-topcard   
@@ -197,6 +209,13 @@ returb new hand
    }
 */
 
+   private static int GetPlayerScore(String TheHand)
+   {
+      int intScore = 0;
+
+      return intScore;
+   }
+
    private static String processPlayer(String playerHand, String topCard, Scanner in, boolean IsComputer) {
       int cardsDrawn = 0;
       String card = "";
@@ -225,7 +244,7 @@ returb new hand
          if (IsComputer)
          {
             // computer is playing, find 1st suitable card.
-            strTheCard = GetFirstSuitableCard(playerHand, strTopCardFace, strTopCardSuit);
+            strTheCard = GetThePlayableCard(playerHand, strTopCardFace, strTopCardSuit);
          }
          else
          {
@@ -281,6 +300,13 @@ returb new hand
          
       }
 
+      // Since strTheCard will become TopCard, we need to check whether it is an 8.
+      // If so we need to replace it with another card
+      if (strTheCard.indexOf("8") >= 0)
+      {
+         strTheCard = getCard();
+      }
+
       // We are passing back The Current TopCard and the current Player's hand
       return strTheCard + ":" + playerHand;
 
@@ -293,34 +319,105 @@ returb new hand
       return null;
    }
 
-
-   private static String GetFirstSuitableCard(String Hand, String Face, String Suit)
+/*
+      // looking for card 3S
+      String strTest1 = GetThePlayableCard("2A 3S 5C 5S", "3", "D");
+      // looking for card 2A
+      String strTest2 = GetThePlayableCard("2A 8S 5C 5S", "2", "D");
+      // look for 8S
+      String strTest3A = GetThePlayableCard("2A 8S 10C 5S", "2", "C");
+      String strTest3B = GetThePlayableCard("8S 2A 10C 5S", "2", "C");
+      String strTest3C = GetThePlayableCard("2A 5S 10C 8S", "2", "C");
+      // looking for 5D
+      String strTest4 = GetThePlayableCard("2A 3S 5C 5D", "3", "D");
+*/
+   private static String GetThePlayableCard(String Hand, String Face, String Suit)
    {
-      String[] arrHand = Hand.trim().split(" ");
       String strTheCard = "";
+      int intFaceIndex = -1;
+      int intSuitIndex = -1;
+      int intNextSpaceIndex = -1;
+      boolean isFound = false;
 
-      for (String strTemp : arrHand)
+      // 8 - beginning
+      if (Hand.indexOf("8") >= 0)
       {
-         if (strTemp.indexOf(Face) >= 0 || strTemp.indexOf(Suit) >= 0)
+         // get the index of 8
+         intFaceIndex = Hand.indexOf("8");
+         // where is the 8?
+         if (intFaceIndex == 0)
          {
-            strTheCard = strTemp;
-            break;
+            // at the begining
+            // need to find the next space
+            intNextSpaceIndex = Hand.indexOf(" ");
+            // now extract the card from indexes
+            strTheCard = Hand.substring(intFaceIndex, intNextSpaceIndex);
          }
-      }
+         else if ((Hand.length() - intFaceIndex) <= 3)
+         {
+            // at the end
+            strTheCard = Hand.substring(intFaceIndex);
+         }
+         else
+         {
+            // in the middle
+            // need to find the next space
+            intNextSpaceIndex = Hand.indexOf(" ", intFaceIndex);
+            // now extract the card from indexes
+            strTheCard = Hand.substring(intFaceIndex, intNextSpaceIndex);      
+         }
 
-      // If strTheCard remains blank, it could mean there is an '8' wildcard in here.
-      // We need to find the '8' card and make that TheCard
-      for (String strTemp : arrHand)
-      {
-         if (strTemp.indexOf("8") >= 0)
-         {
-            strTheCard = strTemp;
-            break;
-         }
+         isFound = true;
       }
+      // 8 - end
+
+      // FACE - beginning
+      if (Hand.indexOf(Face) >= 0 && isFound == false)
+      {
+         // find face index
+         intFaceIndex = Hand.indexOf(Face);
+
+         // where is the Face?
+         if (intFaceIndex == 0)
+         {
+            // at the begining
+            // need to find the next space
+            intNextSpaceIndex = Hand.indexOf(" ");
+            // now extract the card from indexes
+            strTheCard = Hand.substring(intFaceIndex, intNextSpaceIndex);
+         }
+         else if ((Hand.length() - intFaceIndex) <= 3)
+         {
+            // at the end
+            strTheCard = Hand.substring(intFaceIndex);
+         }
+         else
+         {
+            // in the middle
+            // need to find the next space
+            intNextSpaceIndex = Hand.indexOf(" ", intFaceIndex);
+            // now extract the card from indexes
+            strTheCard = Hand.substring(intFaceIndex, intNextSpaceIndex);      
+         }
+
+         isFound = true;
+      }
+      // FACE - end
+
+      // SUIT - beginning
+      if (Hand.indexOf(Suit) >= 0 && isFound == false)
+      {
+         intSuitIndex = Hand.indexOf(Suit);
+      }     
+      // SUIT - end
+
 
       return strTheCard;
+
    }
+
+
+
 
 
 
