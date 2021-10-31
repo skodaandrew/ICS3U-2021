@@ -44,6 +44,8 @@ returb new hand
       public static void main(String[] args) {
          Scanner in = new Scanner(System.in);
 
+
+
          String result = playRound(in);
       }
     
@@ -81,6 +83,12 @@ returb new hand
 
             topCard = getCard();
 
+            // if first card is 8, we need to draw until it is no longer an 8.
+            while (topCard.indexOf("8") >= 0)
+            {
+               topCard = getCard();
+            }
+
             while(GameIsPlaying){
                System.out.println("");
                System.out.println("Your cards: " + playerHand);
@@ -90,35 +98,47 @@ returb new hand
                System.out.println("");
 
                // 1. Human player goes 1st
-               strProcessResult = processPlayer(playerHand, topCard, in, true);
-               // strTopCard + ":" + playerHand
-               topCard = strProcessResult.substring(0, strProcessResult.indexOf(":"));
-               playerHand = strProcessResult.substring(strProcessResult.indexOf(":") + 1);
-
-               GameIsPlaying = !(playerHand.trim().length() == 0);
+               if (GameIsPlaying)
+               {
+                  strProcessResult = processPlayer(playerHand, topCard, in, false);
+                  // strTopCard + ":" + playerHand
+                  topCard = strProcessResult.substring(0, strProcessResult.indexOf(":"));
+                  playerHand = strProcessResult.substring(strProcessResult.indexOf(":") + 1);
+   
+                  GameIsPlaying = !(playerHand.trim().length() == 0);
+               } // if (GameIsPlaying)
 
                // 2. Computer 1 goes
-               strProcessResult = processPlayer(computer1Hand, topCard, in, true);
-               // strTopCard + ":" + playerHand
-               topCard = strProcessResult.substring(0, strProcessResult.indexOf(":"));
-               computer1Hand = strProcessResult.substring(strProcessResult.indexOf(":") + 1);
-
-               GameIsPlaying = !(computer1Hand.trim().length() == 0);
+               if (GameIsPlaying)
+               {
+                  strProcessResult = processPlayer(computer1Hand, topCard, in, true);
+                  // strTopCard + ":" + playerHand
+                  topCard = strProcessResult.substring(0, strProcessResult.indexOf(":"));
+                  computer1Hand = strProcessResult.substring(strProcessResult.indexOf(":") + 1);
+   
+                  GameIsPlaying = !(computer1Hand.trim().length() == 0);
+               } // if (GameIsPlaying)
 
                // 3. Computer 2 goes
-               strProcessResult = processPlayer(computer2Hand, topCard, in, true);
-               // strTopCard + ":" + playerHand
-               topCard = strProcessResult.substring(0, strProcessResult.indexOf(":"));
-               computer2Hand = strProcessResult.substring(strProcessResult.indexOf(":") + 1);
+               if (GameIsPlaying)
+               {
+                  strProcessResult = processPlayer(computer2Hand, topCard, in, true);
+                  // strTopCard + ":" + playerHand
+                  topCard = strProcessResult.substring(0, strProcessResult.indexOf(":"));
+                  computer2Hand = strProcessResult.substring(strProcessResult.indexOf(":") + 1);
 
-               GameIsPlaying = !(computer2Hand.trim().length() == 0);
+                  GameIsPlaying = !(computer2Hand.trim().length() == 0);
+               } // if (GameIsPlaying)
+
             } // while(GameIsPlaying)
             
             // game is over
-            computerPlayer1Score = GetPlayerScore(computer1Hand);
-            computerPlayer2Score = GetPlayerScore(computer2Hand);
-            playerScore = GetPlayerScore(playerHand);
+            computerPlayer1Score = computerPlayer1Score + GetPlayerScore(computer1Hand);
+            computerPlayer2Score = computerPlayer2Score + GetPlayerScore(computer2Hand);
+            playerScore = playerScore + GetPlayerScore(playerHand);
 
+
+            System.out.println("");
             System.out.println(playerScore + "-" + computerPlayer1Score + "-" + computerPlayer2Score);
          } // while (!gameOver(playerScore, computerPlayer1Score, computerPlayer2Score))
 
@@ -238,17 +258,22 @@ returb new hand
                   card = in.nextLine().toUpperCase();
                }
                // if you decide to play an 8, you need to change suit.
-               if (card.indexOf("8") > 0)
+               if (card.indexOf("8") >= 0)
                {
                   String strNewSuit = "X";
-
-                  while (strNewSuit.equals("C") == false || 
-                         strNewSuit.equals("D") == false || 
-                         strNewSuit.equals("S") == false ||
-                         strNewSuit.equals("H") == false) 
+                  boolean NewSuitIsFound = false;
+                  while (NewSuitIsFound == false) 
                   {
-                     System.out.print("which suit do you want to change to ");
-                     strNewSuit = in.nextLine().toUpperCase();                     
+                     System.out.print("which suit do you want to change to: ");
+                     strNewSuit = in.nextLine().toUpperCase(); 
+                     
+                     if (strNewSuit.indexOf("H") >= 0 || strNewSuit.indexOf("C") >= 0 || 
+                         strNewSuit.indexOf("D") >= 0 || strNewSuit.indexOf("S") >= 0   )
+                     {
+                        NewSuitIsFound = true;
+                     }
+
+                                         
                   }
 
                   card = "8" + strNewSuit;
@@ -296,11 +321,16 @@ returb new hand
             
          }
 
-         // Since strTheCard will become TopCard, we need to check whether it is an 8.
-         // If so we need to replace it with another card
-         if (strTheCard.indexOf("8") >= 0)
+         if (IsComputer)
          {
-            strTheCard = getCard();
+            if (playerHand.indexOf("C") >= 0)
+               strTheCard = "8C";
+            else if (playerHand.indexOf("D") >= 0)
+               strTheCard = "8D";
+            else if (playerHand.indexOf("H") >= 0)
+               strTheCard = "8H";
+            else if (playerHand.indexOf("S") >= 0) 
+               strTheCard = "8S";
          }
 
          // We are passing back The Current TopCard and the current Player's hand
@@ -326,7 +356,7 @@ returb new hand
                // at the begining
                // need to find the next space
                intNextSpaceIndex = Hand.indexOf(" ");
-               // now extract the card from indexes
+               // now extract the card f rom indexes
                if (intNextSpaceIndex < 0)
                {
                   strTheCard = Hand;
@@ -358,6 +388,7 @@ returb new hand
   
             }
             
+            /*
             // auto play will play the 8 but we need to change the suit
             if (Hand.indexOf("C") >= 0)
                strTheCard = "8C";
@@ -368,8 +399,7 @@ returb new hand
             else if (Hand.indexOf("S") >= 0) 
                strTheCard = "8S";
             // if all of these fall through, we just us whatever in strTheCard.
-
-
+*/
             isFound = true;
          }
          // 8 - end
