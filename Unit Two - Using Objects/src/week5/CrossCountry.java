@@ -90,10 +90,14 @@ public class CrossCountry {
     private static double convertToSeconds(String time) {
         //5:07.761
         //50.8
+
+        //if time is in second return it
         if (time.indexOf(":") == -1){
             return  (Double.parseDouble(time));
         }
+        //gets the minutes
         String minute = time.substring(0,time.indexOf(":")); 
+        
         
         return (Double.parseDouble( minute ) * 60) + Double.parseDouble(time.substring(time.indexOf(":") + 1)); //minutes and seconds
         

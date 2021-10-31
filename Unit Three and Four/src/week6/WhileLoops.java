@@ -13,6 +13,7 @@ public class WhileLoops {
     private static int countVowels(String str) {
         int numVowels = 0;
         int index = 0;
+        
 
         String vowels = "AEIOUaeiou";
         while (index < str.length()){
