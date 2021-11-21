@@ -14,6 +14,9 @@ public class DieGame {
             if(die1.getTopSide() == die2.getTopSide())
             countPairs++;
         }
+
     }
+
+    
     
 }

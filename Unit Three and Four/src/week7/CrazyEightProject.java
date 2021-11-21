@@ -70,7 +70,8 @@ returb new hand
 
             GameIsPlaying = true;
 
-            for(int i = 0; i < 5; i++){
+            for(int i = 0; i < 5; i++)
+            {
                playerHand += getCard() + " ";
                computer1Hand += getCard() + " ";
                computer2Hand += getCard() + " ";
@@ -228,7 +229,8 @@ returb new hand
          return intScore;
       }
 
-      private static String processPlayer(String playerHand, String topCard, Scanner in, boolean IsComputer) {
+      private static String processPlayer(String playerHand, String topCard, Scanner in, boolean IsComputer) 
+      {
          int cardsDrawn = 0;
          String card = "";
          String strTheCard = "";

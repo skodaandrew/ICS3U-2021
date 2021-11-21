@@ -20,7 +20,7 @@ public class Die{
     
     public Die(){
         this.numSides = 6;
-        .topSide = (int)(Math.random() * numSides) + 1;
+        topSide = (int)(Math.random() * numSides) + 1;
     }
 
     public Die(int numSides){
